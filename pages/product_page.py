@@ -1,6 +1,6 @@
 import re
 
-from playwright.sync_api import Page, TimeoutError as PlaywrightTimeoutError, expect
+from playwright.sync_api import Page, expect
 
 from utils.logger import get_logger
 
@@ -43,10 +43,7 @@ class ProductPage:
 
     @property
     def add_button(self):
-        return self.page.get_by_role(
-            "button",
-            name=re.compile(r"^(ADD|Add|Add to cart|Increase quantity by one)$", re.IGNORECASE),
-        )
+        return self.page.get_by_role("button", name=re.compile(r"^(ADD|Add|Add to cart)$", re.IGNORECASE))
 
     def verify_add_button(self) -> None:
         expect(self.add_button.first).to_be_visible()
@@ -57,24 +54,6 @@ class ProductPage:
             return False
         self.add_button.first.click()
         return True
-
-    def add_first_available_product_to_cart(self) -> str | None:
-        cards = self.page.locator('a[href*="/pn/"]')
-        for index in range(cards.count()):
-            card = cards.nth(index)
-            image = card.locator("img[alt]").first
-            product_name = image.get_attribute("alt") if image.count() else None
-            if not product_name:
-                continue
-            if not self.open_product():
-                return None
-            self.logger.info("Adding available product to cart: %s", product_name)
-            try:
-                return product_name if self.add_to_cart() else None
-            except PlaywrightTimeoutError:
-                self.logger.warning("Zepto did not expose a safely clickable Add control for this product")
-                return None
-        return None
 
     def increase_quantity(self) -> bool:
         button = self.page.get_by_role("button", name=re.compile(r"increase|increment|plus|\+", re.IGNORECASE))
