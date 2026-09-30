@@ -1,0 +1,15 @@
+venv/
+.env
+__pycache__/
+*.pyc
+.pytest_cache/
+.idea/
+.vscode/
+screenshots/*
+!screenshots/.gitkeep
+videos/*
+!videos/.gitkeep
+traces/*
+!traces/.gitkeep
+reports/*
+!reports/.gitkeep
