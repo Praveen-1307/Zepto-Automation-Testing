@@ -12,7 +12,10 @@ class CartPage:
 
     def open_cart(self) -> None:
         self.logger.info("Opening cart")
-        self.page.get_by_role("button", name=re.compile("Cart", re.IGNORECASE)).click()
+        cart_button = self.page.get_by_test_id("cart-btn")
+        if not cart_button.count():
+            cart_button = self.page.get_by_role("button", name="Cart", exact=True)
+        cart_button.first.click()
 
     def verify_cart(self) -> None:
         cart_heading = self.page.get_by_role("heading", name=re.compile("cart|your bag", re.IGNORECASE))
@@ -29,22 +32,26 @@ class CartPage:
         product_link = self.page.locator('a[href*="/pn/"]')
         return product_link.count() > 0 and product_link.first.is_visible()
 
+    @property
+    def cart_dialog(self):
+        return self.page.get_by_role("dialog")
+
     def increase_quantity(self) -> bool:
-        button = self.page.get_by_role("button", name=re.compile(r"increase|increment|plus|\+", re.IGNORECASE))
+        button = self.cart_dialog.get_by_role("button", name="Add", exact=True)
         if not button.count():
             return False
         button.first.click()
         return True
 
     def decrease_quantity(self) -> bool:
-        button = self.page.get_by_role("button", name=re.compile(r"decrease|decrement|minus|remove one|−|-", re.IGNORECASE))
+        button = self.cart_dialog.get_by_role("button", name="Remove", exact=True)
         if not button.count():
             return False
         button.first.click()
         return True
 
     def remove_product(self) -> bool:
-        remove = self.page.get_by_role("button", name=re.compile("remove|delete", re.IGNORECASE))
+        remove = self.cart_dialog.get_by_role("button", name="Remove", exact=True)
         if remove.count():
             remove.first.click()
             return True
@@ -58,6 +65,7 @@ class CartPage:
         cart_button = self.page.get_by_test_id("cart-btn")
         if not cart_button.count():
             cart_button = self.page.get_by_role("button", name="Cart", exact=True)
+        cart_button = cart_button.first
         label = cart_button.get_attribute("aria-label") if cart_button.count() else ""
         text = cart_button.inner_text() if cart_button.count() else ""
         match = re.search(r"\d+", f"{label or ''} {text}")

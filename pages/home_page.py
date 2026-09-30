@@ -45,7 +45,10 @@ class HomePage:
 
     def open_cart(self) -> None:
         self.logger.info("Opening cart")
-        self.page.get_by_role("button", name=re.compile("Cart", re.IGNORECASE)).click()
+        cart_button = self.page.get_by_test_id("cart-btn")
+        if not cart_button.count():
+            cart_button = self.page.get_by_role("button", name="Cart", exact=True)
+        cart_button.first.click()
 
     def open_location(self) -> None:
         dialog = self.page.get_by_role("dialog", name=re.compile("Your Location", re.IGNORECASE))
