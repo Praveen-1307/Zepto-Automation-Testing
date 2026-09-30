@@ -1,5 +1,5 @@
 BASE_URL = "https://www.zepto.com/"
-PRODUCT_NAME = "milk"
+PRODUCT_NAME = "bread"
 ALTERNATE_PRODUCT = "bread"
 INVALID_PRODUCT = "xyznonexistent12345"
 CATEGORY = "Fruits & Vegetables"
