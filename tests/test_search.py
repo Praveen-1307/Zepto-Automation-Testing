@@ -5,7 +5,7 @@ from playwright.sync_api import expect
 
 from pages.home_page import HomePage
 from pages.search_page import SearchPage
-from utils.test_data import ALTERNATE_PRODUCT, INVALID_PRODUCT, PRODUCT_NAME
+from utils.test_data import ALTERNATE_PRODUCT, INVALID_PRODUCT
 
 logger = logging.getLogger(__name__)
 
@@ -92,7 +92,7 @@ def test_TC18_verify_search_result_product_name_is_displayed(page):
 @pytest.mark.search
 def test_TC19_verify_product_price_is_displayed(page):
     # Arrange
-    search_page = _search(page, PRODUCT_NAME)
+    search_page = _search(page, ALTERNATE_PRODUCT)
 
     # Act
     has_price = search_page.verify_product_price()
@@ -107,7 +107,7 @@ def test_TC19_verify_product_price_is_displayed(page):
 @pytest.mark.search
 def test_TC20_verify_product_discount_where_available(page):
     # Arrange
-    search_page = _search(page, PRODUCT_NAME)
+    search_page = _search(page, ALTERNATE_PRODUCT)
 
     # Act
     has_discount = search_page.verify_product_discount()
@@ -124,7 +124,7 @@ def test_TC20_verify_product_discount_where_available(page):
 @pytest.mark.search
 def test_TC21_verify_product_rating_where_available(page):
     # Arrange
-    search_page = _search(page, PRODUCT_NAME)
+    search_page = _search(page, ALTERNATE_PRODUCT)
 
     # Act
     has_rating = search_page.verify_product_rating()
@@ -141,7 +141,7 @@ def test_TC21_verify_product_rating_where_available(page):
 @pytest.mark.search
 def test_TC22_verify_product_image_is_displayed(page):
     # Arrange
-    search_page = _search(page, PRODUCT_NAME)
+    search_page = _search(page, ALTERNATE_PRODUCT)
 
     # Act
     if not search_page.product_cards.count():
